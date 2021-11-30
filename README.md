@@ -51,6 +51,16 @@ the Finaglers mailing list.
 
 <https://twitter.github.io/scrooge/>
 
+
+## Tundra Fork
+
+In order to apply patches for Scala 2.13 this repository has been
+forked. If the original repo gets updated, this fork can be removed.
+
+```
+sbt -java-home $JDK8 ++2.12.12 ";compile ;scrooge-generator/publishLocal ;scrooge-sbt-plugin/publishLocal"
+```
+
 ## License
 
 Copyright 2013 Twitter, Inc.
