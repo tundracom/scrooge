@@ -105,11 +105,8 @@ val scalacTwoTenOptions =
   Seq("-deprecation", "-unchecked", "-feature", "-Xlint", "-encoding", "utf8")
 
 val sharedSettingsWithoutScalaVersion = Seq(
-  version := releaseVersion,
-  organization := "com.twitter",
-  resolvers ++= Seq(
-    "sonatype-public" at "https://oss.sonatype.org/content/groups/public"
-  ),
+  version := "21.8.1-SNAPSHOT",
+  organization := "com.tundra",
   libraryDependencies ++= Seq(
     "junit" % "junit" % "4.12" % "test",
     "org.scalatest" %% "scalatest" % "3.1.2" % "test",
@@ -135,8 +132,28 @@ val sharedSettingsWithoutScalaVersion = Seq(
   publishMavenStyle := true,
   publishConfiguration := publishConfiguration.value.withOverwrite(true),
   publishLocalConfiguration := publishLocalConfiguration.value.withOverwrite(true),
+
+  packageDoc / publishArtifact  := false,
+  packageSrc /publishArtifact := false,
+  Test / publishArtifact := false,
+  publishTo := {
+    if (isSnapshot.value)
+      Some("snapshots" at "https://nexus.tundra-shared.com/repository/maven-snapshots/")
+    else
+      Some("releases" at "https://nexus.tundra-shared.com/repository/maven-releases/")
+  },
+  credentials += Credentials(Path.userHome / ".ivy2" / ".credentials"),
+  resolvers :=
+    Seq(
+      "Tundra Nexus" at "https://nexus.tundra-shared.com/repository/tundra/",
+      "Tundra releases" at "https://nexus.tundra-shared.com/repository/maven-releases/",
+      "SBT release" at "https://dl.bintray.com/sbt/sbt-plugin-releases/",
+      "Typesafe repository" at "https://repo.typesafe.com/typesafe/releases/",
+      "sonatype-public" at "https://oss.sonatype.org/content/groups/public"
+    ),
+
   pomExtra :=
-    <url>https://github.com/twitter/scrooge</url>
+    <url>https://github.com/tundra/scrooge</url>
     <licenses>
       <license>
         <name>Apache License, Version 2.0</name>
@@ -144,8 +161,8 @@ val sharedSettingsWithoutScalaVersion = Seq(
       </license>
     </licenses>
     <scm>
-      <url>git@github.com:twitter/scrooge.git</url>
-      <connection>scm:git:git@github.com:twitter/scrooge.git</connection>
+      <url>git@github.com:tundra/scrooge.git</url>
+      <connection>scm:git:git@github.com:tundra/scrooge.git</connection>
     </scm>
     <developers>
       <developer>
@@ -153,14 +170,12 @@ val sharedSettingsWithoutScalaVersion = Seq(
         <name>Twitter Inc.</name>
         <url>https://www.twitter.com/</url>
       </developer>
+      <developer>
+        <id>tundra</id>
+        <name>Tundra Inc.</name>
+        <url>https://www.tundra.com/</url>
+      </developer>
     </developers>,
-  publishTo := {
-    val nexus = "https://oss.sonatype.org/"
-    if (version.value.trim.endsWith("SNAPSHOT"))
-      Some("snapshots" at nexus + "content/repositories/snapshots")
-    else
-      Some("releases" at nexus + "service/local/staging/deploy/maven2")
-  },
   Compile / resourceGenerators += Def.task {
     val dir = (Compile / resourceManaged).value
     val file = dir / "com" / "twitter" / name.value / "build.properties"
@@ -276,6 +291,7 @@ lazy val scroogeGenerator = Project(
     settingsCrossCompiledWithTwoTen
   ).settings(
     name := "scrooge-generator",
+    scalaVersion := "2.12.12",
     libraryDependencies ++= Seq(
       "org.apache.thrift" % "libthrift" % versions.libthrift,
       "com.github.scopt" %% "scopt" % "4.0.0-RC2",
@@ -370,7 +386,7 @@ lazy val scroogeSbtPlugin = Project(
 ).enablePlugins(BuildInfoPlugin).settings(
     settingsWithTwoTen: _*
   ).settings(
-    scalaVersion := "2.10.7",
+    scalaVersion := "2.12.12",
     crossSbtVersions := Seq("0.13.18", "1.5.3"),
     buildInfoKeys := Seq[BuildInfoKey](name, version, scalaVersion, sbtVersion),
     buildInfoPackage := "com.twitter",
