@@ -105,7 +105,7 @@ val scalacTwoTenOptions =
   Seq("-deprecation", "-unchecked", "-feature", "-Xlint", "-encoding", "utf8")
 
 val sharedSettingsWithoutScalaVersion = Seq(
-  version := "21.8.1",
+  version := "21.8.2-SNAPSHOT",
   organization := "com.tundra",
   libraryDependencies ++= Seq(
     "junit" % "junit" % "4.12" % "test",
