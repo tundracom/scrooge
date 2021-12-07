@@ -169,7 +169,7 @@ trait StructTemplate { self: TemplateGenerator =>
         v(s"_protos.readSet($protoName, $readElement)")
       case t: ListType =>
         val readElement = genReadValueFn1(t.eltType)
-        v(s"_protos.readList($protoName, $readElement)")
+        v(s"_protos.readList($protoName, $readElement).toSeq")
       case t: MapType =>
         val readKey = genReadValueFn1(t.keyType)
         val readVal = genReadValueFn1(t.valueType)

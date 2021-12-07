@@ -221,7 +221,7 @@ class ScalaGenerator(
         prefix + "Set[" + genType(x, immutable).toData + "]"
       case ListType(x, _) =>
         // for historical reasons
-        "_root_.scala.collection.Seq[" + genType(x, immutable).toData + "]"
+        "_root_.scala.collection.immutable.Seq[" + genType(x, immutable).toData + "]"
       case t: NamedType =>
         val id = resolvedDoc.qualifyName(t, namespaceLanguage, defaultNamespace)
         // Named types are capitalized.
