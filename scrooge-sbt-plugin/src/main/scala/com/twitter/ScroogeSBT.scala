@@ -40,6 +40,7 @@ object ScroogeSBT extends AutoPlugin {
       includePaths = thriftIncludes.map(_.getPath).toList,
       thriftFiles = thriftFiles.map(_.getPath).toList,
       flags = flags,
+      languageFlags = Seq("immutable-sequences"),
       namespaceMappings = namespaceMappings,
       strict = !disableStrict,
       scalaWarnOnJavaNSFallback = scalaWarnOnJavaNSFallback,
